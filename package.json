@@ -38,7 +38,10 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "quotes": 0
+      "quotes": 0,
+      "import/extensions": 0,
+      "spaced-comment": 0,
+      "vue/no-unused-components": 0
     }
   },
   "browserslist": [
