@@ -7,10 +7,8 @@ import Search from "../views/Search";
 import Content from "../views/Login/Content";
 import Camra from "../views/Login/Camra";
 
-//安装插件
-Vue.use(VueRouter);
-// 重写VueRouter上的push和replace方法
-const push = VueRouter.prototype.puah;
+// // 重写VueRouter上的push和replace方法
+const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 VueRouter.prototype.push = function (location, onComplete, onAbort) {
   if (onComplete && onAbort) {
@@ -28,6 +26,8 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
   // 如果用户不处理失败，给默认值：空函数
   return replace.call(this, location, onComplete, () => { });
 };
+//安装插件
+Vue.use(VueRouter);
 
 export default new VueRouter({
   routes: [

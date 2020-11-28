@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  // lintOnSave: false, // 关闭所有eslint检查
+  lintOnSave: false, // 关闭所有eslint检查
   // 当前配置会和vue的webpack合并
   configureWebpack: {
     resolve: {

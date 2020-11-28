@@ -17,11 +17,6 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/eslint-config-airbnb": "^5.0.2",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-vue": "^6.2.2",
     "less": "^3.12.2",
     "less-loader": "^5.0.0",
     "vue-template-compiler": "^2.6.11"
@@ -43,7 +38,8 @@
       "import/extensions": 0,
       "spaced-comment": 0,
       "vue/no-unused-components": 0,
-      "prefer-destructuring": 0
+      "prefer-destructuring": 0,
+      "comma-dangle": 0
     }
   },
   "browserslist": [

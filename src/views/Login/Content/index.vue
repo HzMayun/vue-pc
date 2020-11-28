@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <form action="##">
+    <form action="###" @submit.prevent="send_register">
       <div class="input-text">
         <i></i>
         <input type="text" placeholder="手机号" />
@@ -15,17 +15,28 @@
         </label>
         <a class="forget">忘记密码？</a>
       </div>
-      <button class="btn" @click="send_register">登录</button>
+      <button class="btn">登录</button>
     </form>
     <a href="##3" class="register">没有账号？立即注册</a>
   </div>
 </template>
 
 <script>
+import { reqLogin } from "@api/user";
+
 export default {
   name: "Content",
   methods: {
-    send_register() {},
+    send_register() {
+      reqLogin("13700000000", "111111").then(
+        (res) => {
+          console.log("res", res);
+        },
+        (err) => {
+          console.log("err", err);
+        }
+      );
+    },
   },
 };
 </script>
