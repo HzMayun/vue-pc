@@ -8,8 +8,10 @@
 </template>
 
 <script>
-import Header from "./components/Header/index.vue";
-import Footer from "./components/Footer/index.vue";
+import Header from "@comps/Header/index";
+import Footer from "@comps/Footer/index";
+// import Footer from "./components/Footer/index.vue";
+// import Header from "./components/Header/index.vue";
 import "./styles/reset.css";
 
 export default {
