@@ -41,7 +41,8 @@
       "quotes": 0,
       "import/extensions": 0,
       "spaced-comment": 0,
-      "vue/no-unused-components": 0
+      "vue/no-unused-components": 0,
+      "prefer-destructuring": 0
     }
   },
   "browserslist": [

@@ -15,7 +15,7 @@
         </label>
         <a class="forget">忘记密码？</a>
       </div>
-      <button class="btn">登录</button>
+      <button class="btn" @click="send_register">登录</button>
     </form>
     <a href="##3" class="register">没有账号？立即注册</a>
   </div>
@@ -24,6 +24,9 @@
 <script>
 export default {
   name: "Content",
+  methods: {
+    send_register() {},
+  },
 };
 </script>
 

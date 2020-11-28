@@ -3,7 +3,7 @@
     <Header />
     <!-- 加载显示当前路由组件 -->
     <router-view> </router-view>
-    <Footer />
+    <Footer v-if="!$route.meta.isFooterShow" />
   </div>
 </template>
 

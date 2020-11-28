@@ -31,17 +31,14 @@
         </router-link>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
+        <form action="###" class="searchForm" @submit.prevent="search">
           <input
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="searchText"
           />
-          <button
-            @click="search"
-            class="sui-btn btn-xlarge btn-danger"
-            type="button"
-          >
+          <button class="sui-btn btn-xlarge btn-danger" type="submit">
             搜索
           </button>
         </form>
@@ -53,9 +50,36 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      searchText: "",
+    };
+  },
   methods: {
     search() {
-      this.$router.push("/Search");
+      //方案一：字符串拼接
+      // const { searchText } = this;
+      // const params = searchText ? `/${searchText}` : "";
+      // // 编程式导航，将来会发送请求
+      // this.$router.push(`/Search${params}`);
+
+      //  方案二：使用命名路由
+      const { searchText } = this;
+      const location = {
+        name: "search",
+      };
+      if (searchText) {
+        location.params = { searchText };
+      }
+      //router.push(location, onComplete?, onAbort?) ,push方法有三个参数，返回的时promise
+      // 如果不处理返回的失败promise就会报错，连续点击两次（两次地址一样）就会报错
+      //方案一：
+      /* this.$router.push(location).then(
+        (res) => console.log("成功", res),
+        (err) => console.log(err),
+      ); */
+      // 优化：重写一下push，还有顺便把replace也重写一下
+      this.$router.push(location);
     },
   },
 };
