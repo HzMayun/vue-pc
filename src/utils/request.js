@@ -4,7 +4,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://182.92.128.115/api",//公共路径
+  baseURL: "/api",//公共路径 /api表示当前服务器地址
   headers: {
     // token:"xxx" 登录接口不需要token
   },

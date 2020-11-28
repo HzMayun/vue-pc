@@ -16,4 +16,17 @@ module.exports = {
       },
     },
   },
+
+  //设置代理服务器，解决跨域问题
+  devServer: {
+    proxy: {
+      "/api": {    //以api开头的 地址会转发到目标服务器
+        target: "http://182.92.128.115",
+        changeOrigin: true, //允许跨域
+        // pathRewrite: { // 重写路径
+        //   "^/api": "",
+        // },
+      }
+    }
+  }
 };
