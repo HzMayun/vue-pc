@@ -2,6 +2,7 @@
 封装axios拦截器
  */
 import axios from "axios";
+// import { Message } from 'element-ui';
 
 const instance = axios.create({
   baseURL: "/api",//公共路径 /api表示当前服务器地址
@@ -13,6 +14,7 @@ const instance = axios.create({
 // 设置请求拦截器
 instance.interceptors.request.use(
   (config) => {
+
     return config;
   }
 );
@@ -23,6 +25,7 @@ instance.interceptors.response.use(
       return res.data.data;
     }
     //功能失败 返回失败的promise
+    // Message.success(res.data.message)
     return Promise.reject(res.data.message)
   },
   (err) => {
