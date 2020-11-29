@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <form action="###" @submit.prevent="send_register">
+    <form action="###" @submit.prevent="login">
       <div class="input-text">
         <i></i>
         <input type="text" placeholder="手机号" />
@@ -28,10 +28,10 @@ import { reqLogin } from "@api/user";
 export default {
   name: "Content",
   methods: {
-    send_register() {
-      reqLogin("13700000000", "111111").then(
+    login() {
+      reqLogin("137000100000", "111111").then(
         (res) => {
-          console.log("res", res);
+          console.log("res是", res);
         },
         (err) => {
           console.log("err", err);
