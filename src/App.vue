@@ -3,7 +3,7 @@
     <Header />
     <!-- 加载显示当前路由组件 -->
     <router-view> </router-view>
-    <Footer v-if="!$route.meta.isFooterShow" />
+    <Footer v-if="isFooterShow" />
   </div>
 </template>
 
@@ -16,10 +16,23 @@ import "./styles/reset.css";
 
 export default {
   name: "App",
+  data() {
+    return {
+      isFooterShow: true,
+    };
+  },
   components: {
     Header,
     Footer,
   },
+  watch:{
+    $route:{
+      handler(newVal){
+        this.isFooterShow=!(newVal.path.includes("/Login") || newVal.path.includes("/Risgter"))
+      },
+      immediate:true,//一上来就触发
+    }
+  }
 };
 </script>
 

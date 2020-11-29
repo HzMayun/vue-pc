@@ -7,7 +7,7 @@ import Search from "../views/Search";
 import Content from "../views/Login/Content";
 import Camra from "../views/Login/Camra";
 
-// // 重写VueRouter上的push和replace方法
+//  重写VueRouter上的push和replace方法
 const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 VueRouter.prototype.push = function (location, onComplete, onAbort) {

@@ -7,7 +7,7 @@
           <p>尚品汇欢迎您！</p>
           <p>
             <span>请</span>
-            <router-link to="/Login">登录</router-link>
+            <router-link to="/Login">登录123</router-link>
             <router-link to="/Risgter" class="register">免费注册</router-link>
           </p>
         </div>
@@ -41,6 +41,7 @@
           <button class="sui-btn btn-xlarge btn-danger" type="submit">
             搜索
           </button>
+          <!-- button按钮如果没有type，那么在表单中，默认type就是submit -->
         </form>
       </div>
     </div>
@@ -57,11 +58,13 @@ export default {
   },
   methods: {
     search() {
-      //方案一：字符串拼接
-      // const { searchText } = this;
-      // const params = searchText ? `/${searchText}` : "";
-      // // 编程式导航，将来会发送请求
-      // this.$router.push(`/Search${params}`);
+      /* 方案一：字符串拼接
+      获取搜索的数据
+      const { searchText } = this;
+      判断是否要加params参数   如果搜索内容是空，把url路径后面的 / 去掉  
+      const params = searchText ? `/${searchText}` : "";
+      // 编程式导航，将来会发送请求
+      this.$router.push(`/Search${params}`); */
 
       //  方案二：使用命名路由
       const { searchText } = this;
@@ -69,16 +72,10 @@ export default {
         name: "search",
       };
       if (searchText) {
+        //searchText有值就向params添加 searchText
+        // 没有就进不来
         location.params = { searchText };
       }
-      //router.push(location, onComplete?, onAbort?) ,push方法有三个参数，返回的时promise
-      // 如果不处理返回的失败promise就会报错，连续点击两次（两次地址一样）就会报错
-      //方案一：
-      /* this.$router.push(location).then(
-        (res) => console.log("成功", res),
-        (err) => console.log(err),
-      ); */
-      // 优化：重写一下push，还有顺便把replace也重写一下
       this.$router.push(location);
     },
   },
