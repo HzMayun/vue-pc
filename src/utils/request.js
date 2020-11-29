@@ -1,5 +1,6 @@
 //封装axios拦截器
 import axios from "axios";
+// import { Message } from "element-ui";
 //引入进度条
 import Nprogress from  "nprogress";
 //引入样式
@@ -58,6 +59,7 @@ instance.interceptors.response.use(
     };
     // 功能失败了 ：-->返回一个失败的promise
     Nprogress.done();     //进度条
+    // Message.error(message);
     return Promise.reject(response.data.message);
   },
   //响应失败：相依该状态吗不是2xx
