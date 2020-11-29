@@ -38,8 +38,8 @@ export default new VueRouter({
     {
       path: "/Login",
       component: Login,
-      meta: {
-        isFooterShow: true,
+      meta:{ 
+        //当组件加载显示时，meta参数 会传递到$route中
       },
       children: [
         {
