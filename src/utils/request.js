@@ -1,8 +1,8 @@
 //封装axios拦截器
 import axios from "axios";
-// import { Message } from "element-ui";
+import { Message } from "element-ui";
 //引入进度条
-import Nprogress from  "nprogress";
+import NProgress from "nprogress";
 //引入样式
 import "nprogress/nprogress.css";
 
@@ -20,12 +20,12 @@ instance.interceptors.request.use(
       config.headers.token = token;
     } */
     //进度条
-    Nprogress.start();
+    NProgress.start();
     return config;
   }
 );
 
-// 设置响应拦截器 
+// 设置响应拦截器
 instance.interceptors.response.use(
   // 响应成功，响应状态码为2xx
   (response) => {
@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     // API文档里面 code 成功是 200 失败是 201
     //这个拦截器的功能就是返回一个具体为成功还是失败的数据，先在这判断好，然后返回出去
     /*
-      response的数据结构 ： 
+      response的数据结构 ：
         {
           header:{},
           status:{},
@@ -46,27 +46,29 @@ instance.interceptors.response.use(
               name:"Admin",
               token: 90aa16f24d04c7d882051412f9ec45b"
               }
-              ok: true 
+              ok: true
           }
-        } 
+        }
      */
     console.log("response ：", response);
     if (response.data.code === 200) {
       //进度条
-      Nprogress.done();
+      NProgress.done();
       //放回成功的相应数据
       return response.data.data;   //这里没有返回值，默认返回就是一个成功的promise
     };
+    const { message } = response.data
     // 功能失败了 ：-->返回一个失败的promise
-    Nprogress.done();     //进度条
-    // Message.error(message);
-    return Promise.reject(response.data.message);
+    NProgress.done();     //进度条
+    Message.error(message); //错误弹窗提示
+    return Promise.reject(message);
   },
   //响应失败：相依该状态吗不是2xx
   (err) => {
-    Nprogress.done();     //进度条
+    NProgress.done();     //进度条
     // console.dir(err);
-    const message = err.message || "网络错误"; 
+    const message = err.message || "网络错误";
+    Message.error(message);//错误弹窗提示
     return Promise.reject(message);
   }
 )

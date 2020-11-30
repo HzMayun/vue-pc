@@ -25,14 +25,16 @@ export default {
     Header,
     Footer,
   },
-  watch:{
-    $route:{
-      handler(newVal){
-        this.isFooterShow=!(newVal.path.includes("/Login") || newVal.path.includes("/Risgter"))
+  watch: {
+    $route: {
+      handler(newVal) {
+        this.isFooterShow = !(
+          newVal.path.includes("/Login") || newVal.path.includes("/Risgter")
+        );
       },
-      immediate:true,//一上来就触发
-    }
-  }
+      immediate: true, //一上来就触发
+    },
+  },
 };
 </script>
 

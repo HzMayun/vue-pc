@@ -29,7 +29,7 @@ export default {
   name: "Content",
   methods: {
     login() {
-      reqLogin("137000100000", "111111").then(
+      reqLogin("13700000000", "111111").then(
         (res) => {
           console.log("res是", res);
         },
