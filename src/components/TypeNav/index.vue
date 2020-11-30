@@ -1,12 +1,8 @@
 <template>
   <!-- 商品分类导航 -->
   <div class="type-nav">
-    <div
-      class="container"
-      @mouseenter="isNavShow = true"
-      @mouseleave="isNavShow = false"
-    >
-      <h2 class="all">全部商品分类</h2>
+    <div class="container" @mouseleave="isNavShow = false">
+      <h2 class="all" @mouseenter="isNavShow = true">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -138,6 +134,8 @@ export default {
     },
   },
   mounted() {
+    //如果有值就不在发送请求了
+    if (this.categoryList.length) return;
     this.getCategoryList();
   },
 };
