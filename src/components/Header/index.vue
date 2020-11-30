@@ -61,7 +61,7 @@ export default {
       /* 方案一：字符串拼接
       获取搜索的数据
       const { searchText } = this;
-      判断是否要加params参数   如果搜索内容是空，把url路径后面的 / 去掉  
+      判断是否要加params参数   如果搜索内容是空，把url路径后面的 / 去掉
       const params = searchText ? `/${searchText}` : "";
       // 编程式导航，将来会发送请求
       this.$router.push(`/Search${params}`); */
@@ -75,6 +75,12 @@ export default {
         //searchText有值就向params添加 searchText
         // 没有就进不来
         location.params = { searchText };
+      }
+
+      //添加query参数
+      const { categoryName } = this.$route.query;
+      if (categoryName) {
+        location.query = this.$route.query;
       }
       this.$router.push(location);
     },

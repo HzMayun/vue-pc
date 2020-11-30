@@ -115,14 +115,26 @@ export default {
       const { categoryname, categoryid, categorytype } = e.target.dataset;
       if (!categoryname) return;
       this.isNavShow = false; //点击搜索后将Nav列表隐藏
-      this.$router.push({
+
+      const location = {
         // 发送请求
-        path: "/search",
+        name: "search",
+        // path: "/search",
         query: {
           categoryName: categoryname,
           [`categroy${categorytype}Id`]: categoryid,
         },
-      });
+      };
+      //判断当前$route 中是不是有params参数，有就添加到location中
+      const { searchText } = this.$route.params;
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+        console.log(location);
+      }
+
+      this.$router.push(location);
     },
   },
   mounted() {
