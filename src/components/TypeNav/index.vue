@@ -1,7 +1,11 @@
 <template>
   <!-- 商品分类导航 -->
   <div class="type-nav">
-    <div class="container">
+    <div
+      class="container"
+      @mouseenter="isNavShow = true"
+      @mouseleave="isNavShow = false"
+    >
       <h2 class="all">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -13,43 +17,61 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div
-            class="item bo"
-            v-for="category in categoryList"
-            :key="category.categoryId"
-          >
-            <h3>
-              <!-- 一级分类 -->
-              <a href="">{{ category.categoryName }}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="child in category.categoryChild"
-                  :key="child.categoryId"
+      <transition name="search">
+        <div class="sort" v-show="isHomeShow || isNavShow">
+          <div class="all-sort-list2" @click="goSearch">
+            <div
+              class="item bo"
+              v-for="category in categoryList"
+              :key="category.categoryId"
+            >
+              <h3>
+                <!-- 一级分类 -->
+                <!-- categoryname, categoryid, categorytype -->
+                <a
+                  :data-categoryname="category.categoryName"
+                  :data-categoryid="category.categoryId"
+                  :data-categorytype="1"
+                  >{{ category.categoryName }}</a
                 >
-                  <dt>
-                    <!-- 二级分类 -->
-                    <a href="">{{ child.categoryName }}</a>
-                  </dt>
-                  <dd>
-                    <!-- 三级分类 -->
-                    <em
-                      v-for="grandChild in child.categoryChild"
-                      :key="grandChild.categoryId"
-                    >
-                      <a href="">{{ grandChild.categoryName }}</a>
-                    </em>
-                  </dd>
-                </dl>
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <dl
+                    class="fore"
+                    v-for="child in category.categoryChild"
+                    :key="child.categoryId"
+                  >
+                    <dt>
+                      <!-- 二级分类 -->
+                      <a
+                        :data-categoryname="child.categoryName"
+                        :data-categoryid="child.categoryId"
+                        :data-categorytype="2"
+                        >{{ child.categoryName }}</a
+                      >
+                    </dt>
+                    <dd>
+                      <!-- 三级分类 -->
+                      <em
+                        v-for="grandChild in child.categoryChild"
+                        :key="grandChild.categoryId"
+                      >
+                        <a
+                          :data-categoryname="grandChild.categoryName"
+                          :data-categoryid="grandChild.categoryId"
+                          :data-categorytype="3"
+                          >{{ grandChild.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -60,11 +82,12 @@ import { mapState, mapActions } from "vuex"; //导入vuex中的state和actions
 
 export default {
   name: "TypeNav",
-  // data() {
-  //   return {
-  //     categoryList: [], //初始化响应式数据
-  //   };
-  // },
+  data() {
+    return {
+      isHomeShow: this.$route.path === "/",
+      isNavShow: false,
+    };
+  },
   // async mounted() {
   //   //调用发送请求的方法
   //   const reslut = await reqGetBaseCategoryList();
@@ -86,6 +109,21 @@ export default {
   methods: {
     //函数直接写。注意：将来action函数函数名称和mutation函数名称不要重复
     ...mapActions(["getCategoryList"]),
+    // TypeNav点击 后，会跳转到search组件   且三级标题跳转路由路径的各不相同
+    goSearch(e) {
+      //定义函数，接收鼠标事件，categoryname, categoryid, categorytype分别是要给三级标题定义自定义事件的名字
+      const { categoryname, categoryid, categorytype } = e.target.dataset;
+      if (!categoryname) return;
+      this.isNavShow = false; //点击搜索后将Nav列表隐藏
+      this.$router.push({
+        // 发送请求
+        path: "/search",
+        query: {
+          categoryName: categoryname,
+          [`categroy${categorytype}Id`]: categoryid,
+        },
+      });
+    },
   },
   mounted() {
     this.getCategoryList();
@@ -133,7 +171,13 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
-
+      &.search-enter-active {
+        transition: height 0.5s ease;
+        overflow: hidden;
+      }
+      &.search-enter {
+        height: 0px;
+      }
       .all-sort-list2 {
         .item {
           h3 {
