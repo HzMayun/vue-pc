@@ -50,7 +50,7 @@ instance.interceptors.response.use(
           }
         }
      */
-    console.log("response ：", response);
+    // console.log("response ：", response);
     if (response.data.code === 200) {
       //进度条
       NProgress.done();

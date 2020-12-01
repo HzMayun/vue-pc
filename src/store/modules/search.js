@@ -26,7 +26,7 @@ export default {
     GET_PRODUCT(state, productList) {
       // 对state中的数据进行修改
       state.productList = productList
-      console.log(state);
+      // console.log(state);
     }
   },
 
