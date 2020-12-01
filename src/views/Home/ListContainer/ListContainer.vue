@@ -95,8 +95,8 @@ export default {
   methods: {
     ...mapActions(["getBanners"]),
   },
-  async mounted() {
-    await this.getBanners();
+  mounted() {
+    this.getBanners();
   },
 };
 </script>
