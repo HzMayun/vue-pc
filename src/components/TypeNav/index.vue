@@ -118,7 +118,7 @@ export default {
         // path: "/search",
         query: {
           categoryName: categoryname,
-          [`categroy${categorytype}Id`]: categoryid,
+          [`category${categorytype}Id`]: categoryid,
         },
       };
       //判断当前$route 中是不是有params参数，有就添加到location中
