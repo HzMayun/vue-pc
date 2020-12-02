@@ -34,23 +34,57 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  @click="setOrder('1')"
+                >
+                  <a
+                    >综合
+                    <i
+                      :class="{
+                        iconfont: true,
+                        'icon-arrowBottom': isDown,
+                        'icon-arrowTop': !isDown,
+                      }"
+                    ></i>
+                  </a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  @click="setOrder('2')"
+                >
+                  <a>
+                    价格
+                    <span>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-up-filling': true,
+                          deactive:
+                            options.order.indexOf('2') > -1 && isPriceDown,
+                        }"
+                      >
+                      </i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-down-filling': true,
+                          deactive:
+                            options.order.indexOf('2') > -1 && !isPriceDown,
+                        }"
+                      >
+                      </i>
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -139,6 +173,8 @@
 import TypeNav from "@comps/TypeNav";
 import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapState, mapActions, mapGetters } from "vuex";
+import { Handler } from "mockjs";
+import "@font/iconfont.css";
 
 export default {
   name: "Search",
@@ -150,12 +186,14 @@ export default {
         category3Id: "", // 三级分类id
         categoryName: "", // 分类名称
         keyword: "", // 搜索内容（搜索关键字）
-        order: "", // 排序方式：1：综合排序  2：价格排序   asc 升序  desc 降序
+        order: "1:desc", // 排序方式：1：综合排序  2：价格排序   asc 升序  desc 降序
         pageNo: 1, // 分页的页码（第几页）
         pageSize: 5, // 分页的每页商品数量
         props: [], // 商品属性
         trademark: "", // 品牌
       },
+      isDown: true,
+      isPriceDown: false,
     };
   },
   watch: {
@@ -163,6 +201,12 @@ export default {
       //对$route监视，如果发生了变化（点击了选项，使params和query发生了变化）
       this.updateProductList(); //获取params、query参数，并对data中的进行修改，然后在发送请求
     },
+    // $route: {
+    //   handler() {
+    //     this.updateProductList();
+    //   },
+    //   immediate: true,    //一上来就触发一次，这样mounted中就可以不再调用updateProductList了
+    // },
   },
   components: {
     TypeNav,
@@ -182,26 +226,24 @@ export default {
   methods: {
     ...mapActions(["getProduct"]),
     updateProductList() {
-      //定义一个 根据URL来修改options的函数，并发送请求
+      //定义一个 根据URL来修改options的函数，并发送请求（params参数和query参数）
       const { searchText: keyword } = this.$route.params;
       const {
-        categoryName,
         category1Id,
         category2Id,
         category3Id,
+        categoryName,
       } = this.$route.query;
-
       const options = {
-        ...this.options, //携带上面的所有初始化数据
-        //以下会覆盖上面的属性
+        ...this.options,
         keyword,
-        categoryName,
         category1Id,
         category2Id,
         category3Id,
+        categoryName,
       };
-      this.options = options; ///修改data中的options
-      this.getProduct(options); //发送请求，请求数据
+      this.options = options;
+      this.getProduct(options);
     },
     // 删除分类
     delCategoryName() {
@@ -236,6 +278,20 @@ export default {
     delTrademark() {
       this.options.trademark = "";
       this.updateProductList();
+    },
+
+    setOrder(order) {
+      let [orderNum, orderType] = this.options.order.split(":"); //数组的结构赋值
+
+      //不相等就是第一次点击，激活，不改变图标
+      //相等就是第二次点击，改变图标
+      if (orderNum === order) {
+        this.isDown = !this.isDown; //isDown取反（箭头）
+        orderType = orderType === "desc" ? "asc" : "desc"; //orderType也取反
+      }
+
+      // 修改order的值
+      this.options.order = `${order}:${orderType}`;
     },
   },
   mounted() {
@@ -346,11 +402,24 @@ export default {
               line-height: 18px;
 
               a {
-                display: block;
+                display: flex;
                 cursor: pointer;
                 padding: 11px 15px;
                 color: #777;
                 text-decoration: none;
+                span {
+                  display: flex;
+                  flex-direction: column;
+                  justify-items: center;
+                  line-height: 8px;
+                  margin-top: 2px;
+                  i {
+                    font-size: 12px;
+                    &.deactive {
+                      color: rgba(255, 255, 255, 0.5);
+                    }
+                  }
+                }
               }
 
               &.active {
