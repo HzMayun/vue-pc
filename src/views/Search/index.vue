@@ -19,6 +19,10 @@
               {{ options.categoryName }}
               <i @click="delCategoryName">×</i>
             </li>
+            <li class="with-x" v-show="options.trademark">
+              {{ options.trademark.split(":")[1] }}
+              <i @click="delTrademark">×</i>
+            </li>
           </ul>
         </div>
 
@@ -226,6 +230,11 @@ export default {
       console.log(trademark);
       this.options.trademark = trademark;
       console.log(this.options);
+      this.updateProductList();
+    },
+    //删除品牌
+    delTrademark() {
+      this.options.trademark = "";
       this.updateProductList();
     },
   },
