@@ -13,6 +13,7 @@ module.exports = {
         "@store": path.resolve(__dirname, "src/store"),
         "@utils": path.resolve(__dirname, "src/utils"),
         "@api": path.resolve(__dirname, "src/api"),
+        "@font": path.resolve(__dirname, "font_pic"),
       },
     },
   },

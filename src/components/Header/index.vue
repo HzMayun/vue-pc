@@ -85,6 +85,13 @@ export default {
       this.$router.push(location);
     },
   },
+  mounted() {
+    // 绑定事件总线
+    this.$bus.$on("clearKeyword", () => {
+      // 清空searchText
+      this.searchText = "";
+    });
+  },
 };
 </script>
 

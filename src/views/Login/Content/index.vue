@@ -2,11 +2,11 @@
   <div class="content">
     <form action="###" @submit.prevent="login">
       <div class="input-text">
-        <i></i>
+        <i class="iconfont icon-user"></i>
         <input type="text" placeholder="手机号" />
       </div>
       <div class="input-text">
-        <i></i>
+        <i class="iconfont icon-mima1"></i>
         <input type="text" placeholder="请输入密码" />
       </div>
       <div class="setting">
@@ -23,6 +23,7 @@
 
 <script>
 import { reqLogin } from "@api/user";
+import "@font/iconfont.css";
 // import { Message } from "element-ui";
 
 export default {
@@ -43,6 +44,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.icon-user,
+.icon-mima1 {
+  font-size: 27px;
+  color: #fff;
+  text-align: center;
+  line-height: 32px;
+  background-color: #e1251b;
+}
 .content {
   width: 380px;
   height: 316px;
@@ -63,7 +72,7 @@ export default {
       float: left;
       border: 1px solid #ccc;
       box-sizing: border-box;
-      border-radius: 0 2px 2px 0;
+      border-radius: 4px 0 0 4px;
     }
     input {
       width: 302px;
@@ -74,7 +83,7 @@ export default {
       padding: 6px;
       outline: none;
       font-size: 14px;
-      border-radius: 0 2px 2px 0;
+      border-radius: 0 4px 4px 0;
     }
   }
 }

@@ -201,6 +201,9 @@ export default {
     },
     delCategoryName() {
       this.options.categoryName = ""; //data中的数据 清空，就会隐藏了
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
       //delCategoryName是query参数，点击删除的时候，重新跳转，但是要保留当前的params参数
       //push的时候，会触发watch，从而重新发送请求
       this.$router.push({
@@ -210,6 +213,7 @@ export default {
     },
     delKeyword() {
       this.options.keyword = ""; //data中的数据 清空，就会隐藏了
+      this.$bus.$emit("clearKeyword"); // 清空header组件的keyword,全局事件总线
       this.$router.push({
         name: "search",
         query: this.$route.query,

@@ -1,0 +1,107 @@
+{
+  "id": "2242923",
+  "name": "vue-pc",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6282754",
+      "name": "密码 copy",
+      "font_class": "mimacopy",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "9712613",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "10605731",
+      "name": "密码",
+      "font_class": "mima1",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "14835596",
+      "name": "下箭头",
+      "font_class": "arrowBottom-fill",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "14835600",
+      "name": "上箭头",
+      "font_class": "arrowTop-fill",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "14835601",
+      "name": "下箭头",
+      "font_class": "arrowBottom",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "14835602",
+      "name": "上箭头",
+      "font_class": "arrowTop",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "15838455",
+      "name": "direction-down",
+      "font_class": "direction-down",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "15838461",
+      "name": "direction-up",
+      "font_class": "direction-up",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "15838484",
+      "name": "hide",
+      "font_class": "hide",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "15838525",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "15838547",
+      "name": "user",
+      "font_class": "user",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "15838581",
+      "name": "arrow-up-filling",
+      "font_class": "arrow-up-filling",
+      "unicode": "e688",
+      "unicode_decimal": 59016
+    },
+    {
+      "icon_id": "15838582",
+      "name": "arrow-down-filling",
+      "font_class": "arrow-down-filling",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    }
+  ]
+}

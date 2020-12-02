@@ -7,7 +7,8 @@
         "@comps/*": ["./src/components/*"],
         "@store/*": ["./src/store/*"],
         "@utils/*": ["./src/utils/*"],
-        "@api/*": ["./src/api/*"]
+        "@api/*": ["./src/api/*"],
+        "@font/*": ["./font_pic*"]
       }
     },
     "exclude": ["node_modules"]
