@@ -23,7 +23,7 @@
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :addTrademark="addTrademark" />
 
         <!--details-->
         <div class="details clearfix">
@@ -199,6 +199,7 @@ export default {
       this.options = options; ///修改data中的options
       this.getProduct(options); //发送请求，请求数据
     },
+    // 删除分类
     delCategoryName() {
       this.options.categoryName = ""; //data中的数据 清空，就会隐藏了
       this.options.category1Id = "";
@@ -211,6 +212,7 @@ export default {
         params: this.$route.params,
       });
     },
+    // 删除关键字
     delKeyword() {
       this.options.keyword = ""; //data中的数据 清空，就会隐藏了
       this.$bus.$emit("clearKeyword"); // 清空header组件的keyword,全局事件总线
@@ -218,6 +220,13 @@ export default {
         name: "search",
         query: this.$route.query,
       });
+    },
+    // 添加品牌并更新数据
+    addTrademark(trademark) {
+      console.log(trademark);
+      this.options.trademark = trademark;
+      console.log(this.options);
+      this.updateProductList();
     },
   },
   mounted() {

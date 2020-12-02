@@ -3,12 +3,14 @@
     <div class="type-wrap logo">
       <div class="fl key brand">品牌</div>
       <div class="value logos">
-        <ul
-          class="logo-list"
-          v-for="trademark in trademarkList"
-          :key="trademark.tmId"
-        >
-          <li>{{ trademark.tmName }}</li>
+        <ul class="logo-list">
+          <li
+            v-for="trademark in trademarkList"
+            :key="trademark.tmId"
+            @click="addTrademark(`${trademark.tmId}:${trademark.tmName}`)"
+          >
+            {{ trademark.tmName }}
+          </li>
         </ul>
       </div>
       <div class="ext">
@@ -38,6 +40,9 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "SearchSelector",
+  props: {
+    addTrademark: Function,
+  },
   computed: {
     //结构获取数据
     ...mapGetters(["trademarkList", "attrsList"]),
