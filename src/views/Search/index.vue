@@ -11,10 +11,14 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-show="options.keyword">
+              {{ options.keyword }}
+              <i @click="delKeyword">×</i>
+            </li>
+            <li class="with-x" v-show="options.categoryName">
+              {{ options.categoryName }}
+              <i @click="delCategoryName">×</i>
+            </li>
           </ul>
         </div>
 
@@ -194,6 +198,22 @@ export default {
       };
       this.options = options; ///修改data中的options
       this.getProduct(options); //发送请求，请求数据
+    },
+    delCategoryName() {
+      this.options.categoryName = ""; //data中的数据 清空，就会隐藏了
+      //delCategoryName是query参数，点击删除的时候，重新跳转，但是要保留当前的params参数
+      //push的时候，会触发watch，从而重新发送请求
+      this.$router.push({
+        name: "search",
+        params: this.$route.params,
+      });
+    },
+    delKeyword() {
+      this.options.keyword = ""; //data中的数据 清空，就会隐藏了
+      this.$router.push({
+        name: "search",
+        query: this.$route.query,
+      });
     },
   },
   mounted() {
