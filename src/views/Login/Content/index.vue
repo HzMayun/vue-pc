@@ -3,15 +3,18 @@
     <form action="###" @submit.prevent="login">
       <div class="input-text">
         <i class="iconfont icon-user"></i>
-        <input type="text" placeholder="手机号" />
+        <input type="text" placeholder="请输入手机号" v-model="phone" />
       </div>
       <div class="input-text">
         <i class="iconfont icon-mima1"></i>
-        <input type="text" placeholder="请输入密码" />
+        <input type="text" placeholder="请输入密码" v-model="password" />
       </div>
       <div class="setting">
         <label for="###" class="lable">
-          <input type="checkbox" />自动登录
+          <input type="checkbox" v-model="autoLogin" />自动登录
+        </label>
+        <label for="###" class="lable">
+          <input type="checkbox" v-model="RmberPassword" />记住密码
         </label>
         <a class="forget">忘记密码？</a>
       </div>
@@ -24,18 +27,54 @@
 <script>
 import { reqLogin } from "@api/user";
 import "@font/iconfont.css";
-// import { Message } from "element-ui";
+import { Message } from "element-ui"; //引入警告弹窗
 
 export default {
+  data() {
+    return {
+      phone: "",
+      password: "",
+      autoLogin: false,
+      RmberPassword: false,
+    };
+  },
+  // watch: {
+  //   RmberPassword: {
+  //     handler(newVal) {
+  //       window.localStorage.setItem("RmberPassword", newVal);
+  //     },
+  //     deep: true,
+  //   },
+  // },
+  // mounted() {
+  //   this.RmberPassword = window.localStorage.getItem("RmberPassword");
+  //   console.log(this.RmberPassword);
+  // },
   name: "Content",
   methods: {
     login() {
-      reqLogin("13700000000", "111111").then(
+      // 正则判断手机号时候符合规则
+      if (!/^[1][2,3,4,6,5,7,8,9][0-9]{9}$/.test(this.phone)) {
+        // console.log("手机号码有误，请重填");
+        Message.error("手机号码有误，请重填");
+        return;
+      }
+      //判断密码是不是为空
+      if (this.password == "") {
+        // console.log("密码为空，请输入密码");
+        Message.error("密码不能为空，请输入密码！");
+        return;
+      }
+      //发送请求
+      reqLogin(this.phone, this.password).then(
         (res) => {
-          console.log("res是", res);
+          Message({
+            message: "登录成功，正在跳转...",
+            type: "success",
+          });
         },
         (err) => {
-          console.log("err", err);
+          Message.error(err.message);
         }
       );
     },
