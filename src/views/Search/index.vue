@@ -23,11 +23,20 @@
               {{ options.trademark.split(":")[1] }}
               <i @click="delTrademark">×</i>
             </li>
+            <li
+              class="with-x"
+              v-show="options.props.length"
+              v-for="(prop, index) in options.props"
+              :key="prop"
+            >
+              {{ prop.split(":")[2] }}: {{ prop.split(":")[1] }}
+              <i @click="delProp(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector :addTrademark="addTrademark" />
+        <SearchSelector :addTrademark="addTrademark" @add-prop="addProp" />
 
         <!--details-->
         <div class="details clearfix">
@@ -244,9 +253,7 @@ export default {
     },
     // 添加品牌并更新数据
     addTrademark(trademark) {
-      console.log(trademark);
       this.options.trademark = trademark;
-      console.log(this.options);
       this.updateProductList();
     },
     //删除品牌
@@ -254,7 +261,19 @@ export default {
       this.options.trademark = "";
       this.updateProductList();
     },
-
+    //添加商品属性
+    addProp(prop) {
+      //prop :3468:浴室用品:分类
+      //如果props中有了，就return，避免重复添加
+      if (this.options.props.includes(prop)) return;
+      this.options.props.push(prop);
+      this.updateProductList();
+    },
+    delProp(index) {
+      // console.log(index);
+      this.options.props.splice(index, 1); //删除下标index，的元素，往后删一个
+      //index就是点击该元素的在数组props中的下标
+    },
     setOrder(order) {
       let [orderNum, orderType] = this.options.order.split(":"); //数组的结构赋值
 

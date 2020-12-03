@@ -26,7 +26,12 @@
           v-for="(attr, index) in attrs.attrValueList"
           :key="index"
         >
-          <li>
+          <!-- 自定义事件，见参数传过去，然后添加到options中，发送请求 -->
+          <li
+            @click="
+              $emit('add-prop', `${attrs.attrId}:${attr}:${attrs.attrName}`)
+            "
+          >
             <a>{{ attr }}</a>
           </li>
         </ul>
