@@ -6,13 +6,15 @@ export default {
       trademarkList: [],
       attrsList: [],
       goodsList: [],
-    }
+    },
+    total: 0,
   },
   getters: {
     //对数据进行处理，方便访问
     trademarkList(state) { return state.productList.trademarkList },
     attrsList(state) { return state.productList.attrsList },
     goodsList(state) { return state.productList.goodsList },
+    total(state) { return state.productList.total },
   },
   actions: {
     //发送请求

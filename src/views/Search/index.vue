@@ -105,16 +105,11 @@
                   <div class="price">
                     <strong>
                       <em> ¥ </em>
-                      <i>6088.00</i>
+                      <i>{{ goods.price }}</i>
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    <a :title="goods.title">{{ goods.title }}</a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -134,34 +129,11 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
+          <div class="pagination">
+            <Pagination
+              :options="options"
+              :updateProductList="updateProductList"
+            />
           </div>
         </div>
       </div>
@@ -171,6 +143,7 @@
 
 <script>
 import TypeNav from "@comps/TypeNav";
+import Pagination from "./Pagination";
 import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Handler } from "mockjs";
@@ -211,6 +184,7 @@ export default {
   components: {
     TypeNav,
     SearchSelector,
+    Pagination,
   },
   computed: {
     //这么写以后访问很麻烦 ，可以写在getters里面，方便访问
@@ -225,7 +199,7 @@ export default {
   },
   methods: {
     ...mapActions(["getProduct"]),
-    updateProductList() {
+    updateProductList(pageNo = 1) {
       //定义一个 根据URL来修改options的函数，并发送请求（params参数和query参数）
       const { searchText: keyword } = this.$route.params;
       const {
@@ -241,6 +215,7 @@ export default {
         category2Id,
         category3Id,
         categoryName,
+        pageNo,
       };
       this.options = options;
       this.getProduct(options);
@@ -286,12 +261,30 @@ export default {
       //不相等就是第一次点击，激活，不改变图标
       //相等就是第二次点击，改变图标
       if (orderNum === order) {
-        this.isDown = !this.isDown; //isDown取反（箭头）
-        orderType = orderType === "desc" ? "asc" : "desc"; //orderType也取反
+        //
+        //相等的时候，是第二次点击
+        if (order === "1") {
+          // 1 , desc
+          //order=1的时候，上下箭头取反
+          this.isDown = !this.isDown; //isDown取反（箭头）
+        } else {
+          this.isPriceDown = !this.isPriceDown;
+        }
+        orderType = orderType === "asc" ? "deac" : "asc"; //状态取反
+      } else {
+        //不相等，第一次点击
+        if (order === "2") {
+          //如果点击的时价格，默认是升序。
+          this.isPriceDown = false;
+          orderType = "asc"; //2 asc
+        } else {
+          orderType = this.isDown ? "desc" : "asc";
+        }
       }
 
       // 修改order的值
       this.options.order = `${order}:${orderType}`;
+      this.updateProductList();
     },
   },
   mounted() {
@@ -301,6 +294,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.pagination {
+  // background-color: red;
+  text-align: center;
+}
 .main {
   margin: 10px 0;
 
@@ -426,6 +423,9 @@ export default {
                 a {
                   background: #e1251b;
                   color: #fff;
+                  &:hover {
+                    color: #fff !important;
+                  }
                 }
               }
             }
