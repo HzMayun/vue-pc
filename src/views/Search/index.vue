@@ -144,6 +144,14 @@
               :updateProductList="updateProductList"
             />
           </div>
+          <div class="pagination">
+            <MyPagination
+              :current-page="options.pageNo"
+              :pager-count="5"
+              :page-size="5"
+              :total="total"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -153,6 +161,7 @@
 <script>
 import TypeNav from "@comps/TypeNav";
 import Pagination from "./Pagination";
+import MyPagination from "@comps/MyPagination";
 import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Handler } from "mockjs";
@@ -194,6 +203,7 @@ export default {
     TypeNav,
     SearchSelector,
     Pagination,
+    MyPagination,
   },
   computed: {
     //这么写以后访问很麻烦 ，可以写在getters里面，方便访问
@@ -253,6 +263,7 @@ export default {
     },
     // 添加品牌并更新数据
     addTrademark(trademark) {
+      if (this.options.trademark) return;
       this.options.trademark = trademark;
       this.updateProductList();
     },
@@ -314,8 +325,8 @@ export default {
 
 <style lang="less" scoped>
 .pagination {
-  // background-color: red;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 .main {
   margin: 10px 0;
