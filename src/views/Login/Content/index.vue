@@ -3,11 +3,22 @@
     <form action="###" @submit.prevent="login">
       <div class="input-text">
         <i class="iconfont icon-user"></i>
-        <input type="text" placeholder="请输入手机号" v-model="phone" />
+        <input
+          :class="{ active: isTrue }"
+          type="text"
+          placeholder="请输入手机号"
+          v-model="phone"
+        />
       </div>
       <div class="input-text">
         <i class="iconfont icon-mima1"></i>
-        <input type="text" placeholder="请输入密码" v-model="password" />
+        <input
+          type="password"
+          :class="{ active: isTrue }"
+          placeholder="请输入密码"
+          v-model="password"
+        />
+        <!-- autocomplete="password" -->
       </div>
       <div class="setting">
         <label for="###" class="lable">
@@ -28,28 +39,51 @@
 import { reqLogin } from "@api/user";
 import "@font/iconfont.css";
 import { Message } from "element-ui"; //引入警告弹窗
+// import { delete } from "vue/types/umd";
 
 export default {
   data() {
+    const RmberPassword = JSON.parse(
+      window.localStorage.getItem("RmberPassword")
+    );
     return {
       phone: "",
       password: "",
       autoLogin: false,
-      RmberPassword: false,
+      RmberPassword,
+      isTrue: false,
     };
   },
-  // watch: {
-  //   RmberPassword: {
-  //     handler(newVal) {
-  //       window.localStorage.setItem("RmberPassword", newVal);
-  //     },
-  //     deep: true,
-  //   },
-  // },
-  // mounted() {
-  //   this.RmberPassword = window.localStorage.getItem("RmberPassword");
-  //   console.log(this.RmberPassword);
-  // },
+  watch: {
+    RmberPassword: {
+      handler(newVal) {
+        window.localStorage.setItem("RmberPassword", JSON.stringify(newVal));
+      },
+      deep: true,
+    },
+    phone: {
+      handler(newVal) {
+        window.localStorage.setItem("phone", JSON.stringify(newVal));
+      },
+      deep: true,
+    },
+    password: {
+      handler(newVal) {
+        window.localStorage.setItem("password", JSON.stringify(newVal));
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    console.log(this.RmberPassword);
+    if (this.RmberPassword) {
+      this.phone = JSON.parse(window.localStorage.getItem("phone"));
+      this.password = JSON.parse(window.localStorage.getItem("password"));
+      this.isTrue = true;
+    } else {
+      this.isTrue = false;
+    }
+  },
   name: "Content",
   methods: {
     login() {
@@ -83,6 +117,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.active {
+  background-color: #f3f0e0;
+}
 .icon-user,
 .icon-mima1 {
   font-size: 27px;
