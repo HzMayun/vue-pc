@@ -6,6 +6,7 @@ import Register from "../views/Register";
 import Search from "../views/Search";
 import Content from "../views/Login/Content";
 import Camra from "../views/Login/Camra";
+import Detail from "@views/Detail";
 
 //  重写VueRouter上的push和replace方法
 const push = VueRouter.prototype.push;
@@ -38,7 +39,7 @@ export default new VueRouter({
     {
       path: "/Login",
       component: Login,
-      meta:{ 
+      meta: {
         //当组件加载显示时，meta参数 会传递到$route中
       },
       children: [
@@ -68,5 +69,14 @@ export default new VueRouter({
       path: "/Search/:searchText?",
       component: Search,
     },
+    {
+      name: "detail",
+      path: "/detail/:id",
+      component: Detail,
+    },
   ],
+  // 每次切换路由页面滚动条位置
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
 });

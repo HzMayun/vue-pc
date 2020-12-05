@@ -107,9 +107,9 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goods.id}`"
                       ><img :src="goods.defaultImg"
-                    /></a>
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -146,6 +146,7 @@
           </div>
           <div class="pagination">
             <MyPagination
+              @current-change="handleCurrentChange"
               :current-page="options.pageNo"
               :pager-count="5"
               :page-size="5"
@@ -214,7 +215,7 @@ export default {
       goodsList: (state) => state.search.productList.goodsList,
     }), */
     //search 组件只用了gooList里面的数据，所以只写这么一个就行
-    ...mapGetters(["goodsList"]),
+    ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProduct"]),
@@ -315,6 +316,22 @@ export default {
       // 修改order的值
       this.options.order = `${order}:${orderType}`;
       this.updateProductList();
+    },
+    // 当每页条数发生变化触发
+    handleSizeChange(pageSize) {
+      // console.log("pageSize", pageSize);
+      this.options.pageSize = pageSize;
+      this.updateProductList();
+    },
+    // 当页码发生变化触发
+    handleCurrentChange(pageNo) {
+      // console.log("pageNo", pageNo);
+      // this.options.pageNo = pageNo;
+      this.updateProductList(pageNo);
+    },
+    // 判断order以 xxx 开头
+    isOrder(order) {
+      return this.options.order.indexOf(order) > -1;
     },
   },
   mounted() {

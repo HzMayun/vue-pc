@@ -7,7 +7,6 @@ export default {
       attrsList: [],
       goodsList: [],
     },
-    total: 0,
   },
   getters: {
     //对数据进行处理，方便访问
