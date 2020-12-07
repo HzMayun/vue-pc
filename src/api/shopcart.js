@@ -12,7 +12,7 @@ export const reqGetCartList = () => {
 export const reqUpdateCartCount = (skuId, skuNum) => {
   return request({
     method: "POST",
-    url: `/cart/addToCart/${skuId}/${skuNum}`,
+    url: `/cart/addToCart/${skuId}/${skuNum}`
   });
 };
 

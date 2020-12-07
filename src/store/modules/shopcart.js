@@ -7,32 +7,32 @@ import {
 
 export default {
   state: {
-    cartList: [], // 所有购物车数据
+    cartList: [] //所有购物车数据
   },
   getters: {},
   actions: {
     async getCartList({ commit }) {
       const cartList = await reqGetCartList();
-      commit("GET_CART_LIST", cartList);
+      commit('REQ_GETCART_LIST', cartList);
     },
+    async updateCartCheck({ commit }, { skuId, isChecked }) {
+      //发送请求的目的是为了更新服务器的数据
+      //1、手动更新vuex的数据，更新后 页面就会重新渲染
+
+      //2、重新请求购物车数据
+      await reqUpdateCartCheck(skuId, isChecked);
+
+    },
+    //加入购物车
     async updateCartCount({ commit }, { skuId, skuNum }) {
       await reqUpdateCartCount(skuId, skuNum);
-      console.log(commit);
-    },
 
-    // actions函数只能接受外面的一个参数
-    // this.updateCartCheck(a, b) 第二个参数b actions函数是接受不到的
-    async updateCartCheck({ commit }, { skuId, isChecked }) {
-      // 发送请求 --> 更新服务器数据
-      await reqUpdateCartCheck(skuId, isChecked);
-      // 1. 手动更新vuex的数据 --> 页面就会重新渲染
-      // 2. 重新请求所有购物车数据
-      console.log(commit);
     },
   },
   mutations: {
-    GET_CART_LIST(state, cartList) {
+    REQ_GETCART_LIST(state, cartList) {
       state.cartList = cartList;
-    },
+    }
+
   },
 };

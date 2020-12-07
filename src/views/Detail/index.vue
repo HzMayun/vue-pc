@@ -101,7 +101,7 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
+                <!-- <input autocomplete="off" class="itxt" /> -->
                 <!-- element计数器组件 InputNumber 记得引入 -->
                 <el-input-number
                   class="input-number"
@@ -376,16 +376,15 @@ export default {
     // 加入购物车
     async addCart() {
       try {
-        // 发送请求，加入购物车
-        // actions函数必须返回一个promise对象，才会等待它执行
+        //发请求，加入购物车
         await this.updateCartCount({
-          skuId: this.skuInfo.id,
+          skuId: this.skuInfo.id, //skuInfo当前商品的所有信息
           skuNum: this.skuNum,
         });
-        // 一旦加入购物车，跳转到加入购物车成功页面
-        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
-      } catch (e) {
-        console.log(e);
+        // 加入购物车成功后跳转到公务成功关界面
+        this.$router.push(`/addcartsuccess?skuNum${this.skuNum}`);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
@@ -609,7 +608,8 @@ export default {
 
               a {
                 background-color: #e1251b;
-                padding: 0 25px;
+                padding: 0 30px;
+                margin-left: 150px;
                 font-size: 16px;
                 color: #fff;
                 height: 36px;

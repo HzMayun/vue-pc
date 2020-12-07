@@ -7,7 +7,7 @@ import NProgress from "nprogress";
 //引入样式
 import "nprogress/nprogress.css";
 
-const userTempId = getUserTempId();
+let userTempId = getUserTempId();
 
 const instance = axios.create({
   baseURL: "/api",  //设置公共的基础路径
@@ -25,6 +25,7 @@ instance.interceptors.request.use(
     //进度条
     NProgress.start();
     //设置公共ID 的请求头
+    // const userTempId = getUserTempId()   //每次请求就会携带userTempId
     config.headers.userTempId = userTempId;
     return config;
   }

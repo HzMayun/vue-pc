@@ -80,10 +80,10 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(["getCartList"]),
+    ...mapActions(["getCartList", "updateCartCheck"]),
   },
   mounted() {
-    this.getCartList();
+    this.getCartList(); //获取所有购物车数据
   },
 };
 </script>
