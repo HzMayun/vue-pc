@@ -3,29 +3,20 @@
     <form action="###" @submit.prevent="login">
       <div class="input-text">
         <i class="iconfont icon-user"></i>
-        <input
-          :class="{ active: isTrue }"
-          type="text"
-          placeholder="请输入手机号"
-          v-model="phone"
-        />
+        <input type="text" placeholder="请输入手机号" v-model="user.phone" />
       </div>
       <div class="input-text">
         <i class="iconfont icon-mima1"></i>
         <input
           type="password"
-          :class="{ active: isTrue }"
           placeholder="请输入密码"
-          v-model="password"
+          v-model="user.password"
         />
         <!-- autocomplete="password" -->
       </div>
       <div class="setting">
         <label for="###" class="lable">
           <input type="checkbox" v-model="autoLogin" />自动登录
-        </label>
-        <label for="###" class="lable">
-          <input type="checkbox" v-model="RmberPassword" />记住密码
         </label>
         <a class="forget">忘记密码？</a>
       </div>
@@ -36,81 +27,62 @@
 </template>
 
 <script>
-import { reqLogin } from "@api/user";
+import { mapState } from "vuex";
 import "@font/iconfont.css";
 import { Message } from "element-ui"; //引入警告弹窗
 // import { delete } from "vue/types/umd";
 
 export default {
+  name: "Content",
   data() {
-    const RmberPassword = JSON.parse(
-      window.localStorage.getItem("RmberPassword")
-    );
     return {
-      phone: "",
-      password: "",
-      autoLogin: false,
-      RmberPassword,
-      isTrue: false,
+      user: { phone: "", password: "" },
+      autoLogin: false, //自动登录
+      isLogining: false, // 正在登录
     };
   },
-  watch: {
-    RmberPassword: {
-      handler(newVal) {
-        window.localStorage.setItem("RmberPassword", JSON.stringify(newVal));
-      },
-      deep: true,
-    },
-    phone: {
-      handler(newVal) {
-        window.localStorage.setItem("phone", JSON.stringify(newVal));
-      },
-      deep: true,
-    },
-    password: {
-      handler(newVal) {
-        window.localStorage.setItem("password", JSON.stringify(newVal));
-      },
-      deep: true,
-    },
+  computed: {
+    ...mapState({
+      token: (state) => state.user.token,
+      name: (state) => state.user.name,
+    }),
   },
-  mounted() {
-    console.log(this.RmberPassword);
-    if (this.RmberPassword) {
-      this.phone = JSON.parse(window.localStorage.getItem("phone"));
-      this.password = JSON.parse(window.localStorage.getItem("password"));
-      this.isTrue = true;
-    } else {
-      this.isTrue = false;
+  created() {
+    if (this.token) {
+      //如果有token，这届跳转到主页
+      this.$router.replace("/");
     }
   },
-  name: "Content",
   methods: {
-    login() {
-      // 正则判断手机号时候符合规则
-      if (!/^[1][2,3,4,6,5,7,8,9][0-9]{9}$/.test(this.phone)) {
-        // console.log("手机号码有误，请重填");
-        Message.error("手机号码有误，请重填");
-        return;
-      }
-      //判断密码是不是为空
-      if (this.password == "") {
-        // console.log("密码为空，请输入密码");
-        Message.error("密码不能为空，请输入密码！");
-        return;
-      }
-      //发送请求
-      reqLogin(this.phone, this.password).then(
-        (res) => {
-          Message({
-            message: "登录成功，正在跳转...",
-            type: "success",
-          });
-        },
-        (err) => {
-          Message.error(err.message);
+    async login() {
+      try {
+        if (this.isLogining) return;
+        this.isLogining = true;
+        const { phone, password } = this.user;
+        // 正则判断手机号时候符合规则
+        if (!/^[1][2,3,4,6,5,7,8,9][0-9]{9}$/.test(phone)) {
+          Message.error("手机号码有误，请重填");
+          return;
         }
-      );
+        //判断密码是不是为空
+        if (this.password == "") {
+          // console.log("密码为空，请输入密码");
+          Message.error("密码不能为空，请输入密码！");
+          return;
+        }
+        //发送请求  登录
+        await this.$store.dispatch("reqLogin", { phone, password });
+
+        //登录成功
+        if (this.autoLogin) {
+          //如果有自动登录，把token和name存入localStorage
+          localStorage.setItem("token", this.token);
+          localStorage.setItem("name", this.name);
+        }
+        this.$router.replace("/"); //存入后跳转到主页
+      } catch (error) {
+        this.isLogining = false; //登陆失败，就将isLogining重置为false
+      }
     },
   },
 };

@@ -10,67 +10,159 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input
-          type="text"
-          placeholder="请输入你的手机号"
-          v-model="optinos.phone"
-        />
-        <span class="error-msg">错误提示信息</span>
+        <ValidationProvider rules="required|length|phone" v-slot="{ errors }">
+          <input
+            type="text"
+            placeholder="请输入你的手机号"
+            v-model="user.phone"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="optinos.code" />
+        <input type="text" placeholder="请输入验证码" v-model="user.code" />
         <img
+          @click="refresh"
           ref="code"
           src="http://182.92.128.115/api/user/passport/code"
           alt="code"
         />
-        <span class="error-msg">错误提示信息</span>
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
         <label>登录密码:</label>
         <input
-          type="text"
+          type="password"
           placeholder="请输入你的登录密码"
-          v-model="optinos.password"
+          v-model="user.password"
         />
-        <span class="error-msg">错误提示信息</span>
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" />
-        <span class="error-msg">错误提示信息</span>
+        <input
+          type="password"
+          placeholder="请输入确认密码"
+          v-model="user.rePassword"
+        />
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" />
+        <input name="m1" type="checkbox" v-model="user.isAgree" />
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="register">完成注册</button>
       </div>
     </div>
 
     <!-- 底部 -->
-    <Footer />
+    <div class="copyright">
+      <ul>
+        <li>关于我们</li>
+        <li>联系我们</li>
+        <li>联系客服</li>
+        <li>商家入驻</li>
+        <li>营销中心</li>
+        <li>手机尚品汇</li>
+        <li>销售联盟</li>
+        <li>尚品汇社区</li>
+      </ul>
+      <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
+      <div class="beian">京ICP备19006430号</div>
+    </div>
   </div>
 </template>
 
 <script>
 import Footer from "@comps/Footer";
+import { ValidationProvider, extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+import { Message } from "element-ui";
+// import { mapActions } from "vuex";
+
+extend("required", {
+  ...required,
+  message: "手机号必须要填写", // 错误信息
+});
+//手机号长度 11位
+extend("length", {
+  validate(value) {
+    return value.length === 11;
+  },
+  message: "长度必须为11位", // 错误信息
+});
+//手机号数字规范
+extend("phone", {
+  validate(value) {
+    return /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(
+      value
+    );
+  },
+  message: "手机号不符合规范",
+});
+
 export default {
   name: "Register",
   data() {
     return {
-      options: {
+      user: {
         phone: "",
         paasword: "",
-        code: "",
+        rePassword: "", // 确认密码
+        code: "", //验证码
+        isAgree: false, // 同意登录
       },
     };
   },
   components: {
     Footer,
+    ValidationProvider,
+  },
+  computed: {},
+  methods: {
+    // ...mapActions(["getRegister"]),
+    async register() {
+      //1、收集表单数据
+      const { phone, rePassword, password, code, isAgree } = this.user;
+      //2、正则验证
+      if (!isAgree) {
+        Message.error("请同意用户注册协议");
+        return;
+      }
+      if (!phone) {
+        Message.error("手机号不能为空");
+        return;
+      }
+      if (!code) {
+        Message.error("验证码不能为空");
+        return;
+      }
+      if (!password) {
+        Message.error("密码不能为空");
+        return;
+      }
+      if (!rePassword) {
+        Message.error("请输入确认密码");
+        return;
+      }
+
+      if (password !== rePassword) {
+        Message.error("两次密码不一致");
+      }
+      console.log(phone, rePassword, password, code, isAgree);
+      //3、发送请求
+      await this.$store.dispatch("getRegister", { phone, password, code });
+      //4、注册成功跳转页面
+      this.$router.push("/Login");
+    },
+    // 刷新验证码
+    refresh() {
+      // e.target.src = "http://182.92.128.115/api/user/passport/code";
+      this.$refs.code.src = "http://182.92.128.115/api/user/passport/code";
+    },
   },
 };
 </script>

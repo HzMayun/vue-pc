@@ -102,10 +102,16 @@
             <div class="cartWrap">
               <div class="controls">
                 <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <!-- element计数器组件 InputNumber 记得引入 -->
+                <el-input-number
+                  class="input-number"
+                  v-model="skuNum"
+                  controls-position="right"
+                  :min="1"
+                  :max="100"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -355,17 +361,35 @@ export default {
   data() {
     return {
       currentImgIndex: 0, // 当前选中图片的下标
+      skuNum: 1, // 商品数量
     };
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
-    ...mapActions(["getDetail"]),
+    ...mapActions(["getDetail", "updateCartCount"]),
+    // 更新选中图片的下标
     updateCurrentImgIndex(index) {
       this.currentImgIndex = index;
     },
+    // 加入购物车
+    async addCart() {
+      try {
+        // 发送请求，加入购物车
+        // actions函数必须返回一个promise对象，才会等待它执行
+        await this.updateCartCount({
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum,
+        });
+        // 一旦加入购物车，跳转到加入购物车成功页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
+
   mounted() {
     this.getDetail(this.$route.params.id);
   },

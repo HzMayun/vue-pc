@@ -1,5 +1,5 @@
 <template>
-  <div class="spec-preview">
+  <div class="spec-preview" @mousemove="maskMove($event)">
     <!-- 中图 -->
     <img :src="imgUrl" />
     <!-- 和中图一样大小的div -->
@@ -9,7 +9,7 @@
       <img :src="bigImgUrl" />
     </div>
     <!-- 绿色的遮罩层 -->
-    <div class="mask"></div>
+    <div class="mask" @click="hand"></div>
   </div>
 </template>
 
@@ -19,6 +19,16 @@ export default {
   props: {
     imgUrl: String,
     bigImgUrl: String,
+  },
+  methods: {
+    maskMove(e) {
+      console.log(1);
+      this.top = e.offsetY - 25 + "px";
+      this.left = e.offsetX - 25 + "px";
+    },
+    hand() {
+      console.log(2);
+    },
   },
 };
 </script>
