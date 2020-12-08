@@ -68,7 +68,7 @@
         </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney"></i>
+          <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
           <router-link to="/pay" class="sum-btn">结算</router-link>
@@ -90,6 +90,14 @@ export default {
     total() {
       return this.cartList.filter((cart) => cart.isChecked === 1).length;
     },
+    //商品总价
+    totalPrice() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, v) => {
+          return (p += v.cartPrice);
+        }, 0);
+    },
     isAllChecked: {
       get() {
         return this.cartList.length === this.total ? 1 : 0;
@@ -102,8 +110,6 @@ export default {
           //修改完后发送请求，修改服务器的数据
           this.updateCartCheck({ skuId, isChecked });
         });
-        //修改完后发送请求，修改服务器的数据
-        // this.updateCartCheck({ skuId, isChecked });
       },
     },
   },
