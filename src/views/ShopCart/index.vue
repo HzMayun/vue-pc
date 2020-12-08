@@ -176,6 +176,7 @@ export default {
     .cart-body {
       margin: 15px 0;
       border: 1px solid #ddd;
+      text-align: center;
 
       .cart-list {
         padding: 10px;
@@ -187,11 +188,11 @@ export default {
         }
 
         .cart-list-con1 {
-          width: 4.1667%;
+          width: 20%;
         }
 
         .cart-list-con2 {
-          width: 25%;
+          width: 30%;
 
           img {
             width: 82px;
@@ -208,7 +209,7 @@ export default {
         }
 
         .cart-list-con3 {
-          width: 20.8333%;
+          width: 12.5%;
 
           .item-txt {
             text-align: center;
