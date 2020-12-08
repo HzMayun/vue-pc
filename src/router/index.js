@@ -9,6 +9,11 @@ import Camra from "../views/Login/Camra";
 import Detail from "@views/Detail";
 import AddCartSuccess from "../views/AddCartSuccess";
 import ShopCart from "../views/ShopCart";
+import store from "../store";
+import Pay from "@views/Pay";
+import PaySuccess from "@views/PaySuccess";
+import Trade from "@views/Trade";
+import Center from "@views/Center";
 
 //  重写VueRouter上的push和replace方法
 const push = VueRouter.prototype.push;
@@ -32,7 +37,7 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
 //安装插件
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: "/",
@@ -88,9 +93,54 @@ export default new VueRouter({
       path: "/shopcart",
       component: ShopCart,
     },
+    {
+      // 命名路由
+      name: "pay",
+      path: "/pay",
+      component: Pay,
+    },
+    {
+      // 命名路由
+      name: "paysuccess",
+      path: "/paysuccess",
+      component: PaySuccess,
+    },
+    {
+      // 命名路由
+      name: "center",
+      path: "/center/myorder",
+      component: Center,
+    },
+    {
+      // 命名路由
+      name: "trade",
+      path: "/trade",
+      component: Trade,
+    },
   ],
   // 每次切换路由页面滚动条位置
   scrollBehavior() {
     return { x: 0, y: 0 };
   },
 });
+//需要进行登录验证的地址
+const permissPath = ['/trade', '/pay', "/center"]
+/*
+  路由导航守卫
+    to :要去的路由对象
+    from : 但其那款路由对象（$route）
+    next : 回调函数，跳转到那个路由的方法
+      要去登录路由 next('/login')  next({path: '/login'})  next({name: 'login'})
+
+    1、全局前置守卫
+
+*/
+//全局前置守卫
+router.beforeEach((to, from, next) => {
+  console.log(from);
+  if (permissPath.indexOf(to.path) > -1 && store.state.token) {
+    return next("/Login")
+  }
+  else next()
+})
+export default router
