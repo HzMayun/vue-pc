@@ -26,13 +26,20 @@ export default {
     //加入购物车
     async updateCartCount({ commit }, { skuId, skuNum }) {
       await reqUpdateCartCount(skuId, skuNum);
-
+      commit("UPDATE_CART_COUNT", { skuId, skuNum });
     },
   },
   mutations: {
     REQ_GETCART_LIST(state, cartList) {
       state.cartList = cartList;
+    },
+    UPDATE_CART_COUNT(state, { skuId, skuNum }) {
+      state.cartList = state.cartList.map((cart) => {
+        if (cart.skuId === skuId) {
+          cart.skuNum += skuNum;
+        }
+        return cart;
+      });
     }
-
   },
 };

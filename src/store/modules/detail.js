@@ -27,12 +27,13 @@ export default {
       const detailList = await reqGetDetail(id);
       //拿到数据后productList，传给mutations,
       commit('GET_DETAIL', detailList)
-    }
+    },
+
   },
   mutations: {
     GET_DETAIL(state, detailList) {
       state.detailList = detailList
-    }
+    },
   },
 
 }

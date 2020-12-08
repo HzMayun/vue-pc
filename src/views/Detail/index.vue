@@ -381,8 +381,11 @@ export default {
           skuId: this.skuInfo.id, //skuInfo当前商品的所有信息
           skuNum: this.skuNum,
         });
-        // 加入购物车成功后跳转到公务成功关界面
-        this.$router.push(`/addcartsuccess?skuNum${this.skuNum}`);
+
+        // 加入购物车成功后跳转到添加成功界面
+        this.$router.push(
+          `/addcartsuccess?skuNum=${this.skuNum}&skuId=${this.skuInfo.id}`
+        );
       } catch (error) {
         console.log(error);
       }
