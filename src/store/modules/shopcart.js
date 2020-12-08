@@ -23,6 +23,14 @@ export default {
       await reqUpdateCartCheck({ skuId, isChecked });    //失败了
       commit("UPDATE_CART_CHECK", { skuId, isChecked })
     },
+
+    // //修改所有的checked
+    // async updateAllChecked({ commit }, { skuId, isChecked }) {
+    //   await reqUpdateCartCheck({ skuId, isChecked });    //失败了
+    //   commit("update_All_Checked", { skuId, isChecked })
+    // },
+
+
     //加入购物车
     async updateCartCount({ commit }, { skuId, skuNum }) {
       await reqUpdateCartCount(skuId, skuNum);

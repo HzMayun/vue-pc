@@ -53,7 +53,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="isAllChecked" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -62,10 +62,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ total }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">{{}}</i>
+          <i class="summoney"></i>
         </div>
         <div class="sumbtn">
           <router-link to="/pay" class="sum-btn">结算</router-link>
@@ -85,15 +88,31 @@ export default {
     }),
     //商品总数
     total() {
-      return this.cartList.filter((cart) => cart.isChecked === 1);
+      return this.cartList.filter((cart) => cart.isChecked === 1).length;
+    },
+    isAllChecked: {
+      get() {
+        return this.cartList.length === this.total ? 1 : 0;
+      },
+      async set(val) {
+        await this.cartList.map((cart) => {
+          const skuId = cart.skuId;
+          const isChecked = +val;
+          cart.isChecked = +val; //val转num
+          //修改完后发送请求，修改服务器的数据
+          this.updateCartCheck({ skuId, isChecked });
+        });
+        //修改完后发送请求，修改服务器的数据
+        // this.updateCartCheck({ skuId, isChecked });
+      },
     },
   },
   methods: {
     ...mapActions(["getCartList", "updateCartCheck"]),
     //切换商品选中状态
     async checkCart(skuId, isChecked) {
-      await this.updateCartCheck({ skuId, isChecked });
-      // this.getCartList();
+      await this.updateCartCheck({ skuId, isChecked }); //发送请求，修改服务器上的ischecked的值
+      // this.getCartList(); //重新调用获取商品状态
     },
   },
   mounted() {
