@@ -37,6 +37,7 @@ export default {
     ...mapActions(["getDetail"]),
   },
   mounted() {
+    //发送请求。this.$route.query.skuId  是detail传过来的 商品id  就是添加到购物车的id
     this.getDetail(this.$route.query.skuId);
   },
 };
