@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cart.isChecked" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cart.isChecked"
+              @click="checkCart(cart.skuId, cart.isChecked ? 0 : 1)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -60,7 +65,7 @@
         <div class="chosed">已选择 <span>0</span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{}}</i>
         </div>
         <div class="sumbtn">
           <router-link to="/pay" class="sum-btn">结算</router-link>
@@ -78,9 +83,18 @@ export default {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
+    //商品总数
+    total() {
+      return this.cartList.filter((cart) => cart.isChecked === 1);
+    },
   },
   methods: {
     ...mapActions(["getCartList", "updateCartCheck"]),
+    //切换商品选中状态
+    async checkCart(skuId, isChecked) {
+      await this.updateCartCheck({ skuId, isChecked });
+      // this.getCartList();
+    },
   },
   mounted() {
     this.getCartList(); //获取所有购物车数据
