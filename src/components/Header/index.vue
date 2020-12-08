@@ -5,7 +5,11 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="$store.state.user.name">
+            <router-link to="/Login">{{ $store.state.user.name }}</router-link>
+            <router-link to="/" class="register">退出</router-link>
+          </p>
+          <p v-else>
             <span>请</span>
             <router-link to="/Login">登录123</router-link>
             <router-link to="/Risgter" class="register">免费注册</router-link>
