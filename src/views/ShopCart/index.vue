@@ -30,15 +30,29 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <button
+              @click="updateCount(cart.skuId, -1, cart.skuNum)"
+              class="mins"
+              :disabled="cart.skuNum === 1"
+            >
+              -
+            </button>
             <input
               autocomplete="off"
               type="text"
               :value="cart.skuNum"
               minnum="1"
               class="itxt"
+              @blur="update(cart.skuId, cart.skuNum, $event)"
+              @input="formatSkuNum"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <button
+              @click="updateCount(cart.skuId, 1, cart.skuNum)"
+              class="plus"
+              :disabled="cart.skuNum === 10"
+            >
+              +
+            </button>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -71,7 +85,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <router-link to="/pay" class="sum-btn">结算</router-link>
+          <a class="sum-btn" @click="submit">结算</a>
         </div>
       </div>
     </div>
@@ -88,15 +102,15 @@ export default {
     }),
     //商品总数
     total() {
-      return this.cartList.filter((cart) => cart.isChecked === 1).length;
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum, 0);
     },
     //商品总价
     totalPrice() {
       return this.cartList
         .filter((cart) => cart.isChecked === 1)
-        .reduce((p, v) => {
-          return (p += v.cartPrice);
-        }, 0);
+        .reduce((p, c) => p + c.cartPrice * c.skuNum, 0);
     },
     isAllChecked: {
       get() {
@@ -114,11 +128,38 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCartList", "updateCartCheck"]),
+    ...mapActions(["getCartList", "updateCartCheck", "updateCartCount"]),
+    //
+    formatSkuNum(e) {
+      let skuNum = +e.target.value.replace(/\D+/g, ""); //手动输入只能输入数字
+      if (skuNum < 1) {
+        skuNum = 1; //数量不能小于1
+      } else if (skuNum > 10) {
+        // 商品数量不能大于库存
+        skuNum = 10;
+      }
+      e.target.value = skuNum;
+    },
+    //更新服务器数据，（购物车加减），修改vuex数据重新渲染
+    update(skuId, skuNum, e) {
+      if (+e.target.value === skuNum) {
+        return;
+      }
+      this.updateCartCount({ skuId, skuNum: e.target.value - skuNum });
+    },
+    async updateCount(skuId, skuNum) {
+      await this.updateCartCount({ skuId, skuNum });
+      // 刷新页面
+      // this.getCartList();
+    },
     //切换商品选中状态
     async checkCart(skuId, isChecked) {
       await this.updateCartCheck({ skuId, isChecked }); //发送请求，修改服务器上的ischecked的值
       // this.getCartList(); //重新调用获取商品状态
+    },
+    //提交，
+    submit() {
+      this.$router.push("/trade");
     },
   },
   mounted() {

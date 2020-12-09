@@ -31,9 +31,11 @@ export default {
     // },
 
 
-    //加入购物车
+    //添加、减少购物车数据
     async updateCartCount({ commit }, { skuId, skuNum }) {
+      // 发送请求，
       await reqUpdateCartCount(skuId, skuNum);
+      // 激活UPDATE_CART_COUNT ，修改vuex中的数据，使页面重新渲染
       commit("UPDATE_CART_COUNT", { skuId, skuNum });
     },
   },
@@ -50,7 +52,7 @@ export default {
         return cart;
       });
     },
-    //修改商品选中状态
+    //修改商品选中状态。修改vuex中的数据，使页面重新渲染
     UPDATE_CART_CHECK(state, { skuId, isChecked }) {
       console.log({ skuId, isChecked });
       state.cartList.find((item) => {

@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from "./router";
-import './plugins/element.js';
 import store from "./store";
-import "./mock/mockServer"
+import "./mock/mockServer";
+
+import './plugins/element.js';
+import "./plugins/lazyLoad.js";
 
 Vue.config.productionTip = false;
 

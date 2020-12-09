@@ -127,7 +127,7 @@ export default {
     async register() {
       //1、收集表单数据
       const { phone, rePassword, password, code, isAgree } = this.user;
-      //2、正则验证
+      /*  //2、正则验证
       if (!isAgree) {
         Message.error("请同意用户注册协议");
         return;
@@ -147,13 +147,14 @@ export default {
       if (!rePassword) {
         Message.error("请输入确认密码");
         return;
-      }
+      } */
 
       if (password !== rePassword) {
         Message.error("两次密码不一致");
       }
       console.log(phone, rePassword, password, code, isAgree);
       //3、发送请求
+      console.log({ phone, password, code });
       await this.$store.dispatch("getRegister", { phone, password, code });
       //4、注册成功跳转页面
       this.$router.push("/Login");

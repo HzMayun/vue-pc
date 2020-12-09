@@ -1,19 +1,46 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home";
-import Login from "../views/Login";
-import Register from "../views/Register";
-import Search from "../views/Search";
-import Content from "../views/Login/Content";
-import Camra from "../views/Login/Camra";
-import Detail from "@views/Detail";
-import AddCartSuccess from "../views/AddCartSuccess";
-import ShopCart from "../views/ShopCart";
 import store from "../store";
-import Pay from "@views/Pay";
-import PaySuccess from "@views/PaySuccess";
-import Trade from "@views/Trade";
-import Center from "@views/Center";
+
+// import Home from "../views/Home";
+// import Login from "../views/Login";
+// import Register from "../views/Register";
+// import Search from "../views/Search";
+// import Content from "../views/Login/Content";
+// import Camra from "../views/Login/Camra";
+// import Detail from "@views/Detail";
+// import AddCartSuccess from "../views/AddCartSuccess";
+// import ShopCart from "../views/ShopCart";
+// import Pay from "@views/Pay";
+// import PaySuccess from "@views/PaySuccess";
+// import Trade from "@views/Trade";
+// import Center from "@views/Center";
+
+const Home = () => import("../views/Home");
+const Register = () => import("../views/Register");
+const Login = () => import("../views/Login");
+const Search = () => import("../views/Search");
+const Content = () => import("../views/Login/Content");
+const Camra = () => import("../views/Login/Camra");
+const Detail = () => import("@views/Detail");
+const AddCartSuccess = () => import("../views/AddCartSuccess");
+const ShopCart = () => import("../views/ShopCart");
+const Pay = () => import("@views/Pay");
+const PaySuccess = () => import("@views/PaySuccess");
+const Trade = () => import("@views/Trade");
+const Center = () => import("@views/Center");
+// import Login from "../views/Login";
+// import Register from "../views/Register";
+// import Search from "../views/Search";
+// import Content from "../views/Login/Content";
+// import Camra from "../views/Login/Camra";
+// import Detail from "@views/Detail";
+// import AddCartSuccess from "../views/AddCartSuccess";
+// import ShopCart from "../views/ShopCart";
+// import Pay from "@views/Pay";
+// import PaySuccess from "@views/PaySuccess";
+// import Trade from "@views/Trade";
+// import Center from "@views/Center";
 
 //  重写VueRouter上的push和replace方法
 const push = VueRouter.prototype.push;
@@ -86,6 +113,15 @@ const router = new VueRouter({
       name: "addcartsuccess",
       path: "/addcartsuccess",
       component: AddCartSuccess,
+      //路由独享守卫
+      beforeEnter: (to, from, next) => {
+        //需求：只有添加了购物车才能进，没有添加的就不能进
+        //1、从detail跳过来的 2、有数据。
+        if (from.name === 'detail') {
+          return next()
+        }
+        next("/shopcart")
+      }
     },
     {
       // 命名路由
@@ -123,8 +159,7 @@ const router = new VueRouter({
     return { x: 0, y: 0 };
   },
 });
-//需要进行登录验证的地址
-const permissPath = ['/trade', '/pay', "/center"]
+
 /*
   路由导航守卫
     to :要去的路由对象
@@ -135,6 +170,8 @@ const permissPath = ['/trade', '/pay', "/center"]
     1、全局前置守卫
 
 */
+//需要进行登录验证的地址
+const permissPath = ['/trade', '/pay', "/center"]
 //全局前置守卫
 router.beforeEach((to, from, next) => {
   console.log(from);

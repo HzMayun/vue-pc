@@ -7,6 +7,9 @@ import NProgress from "nprogress";
 //引入样式
 import "nprogress/nprogress.css";
 
+// store就是vuex的store，也是this.$store
+import store from "../store";
+
 let userTempId = getUserTempId();
 
 const instance = axios.create({
@@ -22,11 +25,19 @@ instance.interceptors.request.use(
     /* if (token) {
       config.headers.token = token;
     } */
-    //进度条
+    //开始进度条
     NProgress.start();
+
+
     //设置公共ID 的请求头
     // const userTempId = getUserTempId()   //每次请求就会携带userTempId
     config.headers.userTempId = userTempId;
+    //登录后，会返回token，也写入请求头中
+    const token = store.state.user.token;
+    if (token) {
+      config.headers.token = token
+    }
+
     return config;
   }
 );
