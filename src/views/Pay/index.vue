@@ -11,11 +11,15 @@
         <div class="paymark">
           <span class="fl"
             >请您在提交订单<em class="orange time">4小时</em
-            >之内完成支付，超时订单会自动取消。订单号：<em>{{}}</em></span
+            >之内完成支付，超时订单会自动取消。订单号：<em>{{
+              $route.query.orderId
+            }}</em></span
           >
           <span class="fr"
             ><em class="lead">应付金额：</em
-            ><em class="orange money">￥{{ totalPrice }}</em></span
+            ><em class="orange money"
+              >￥{{ $route.query.totalAmount }}</em
+            ></span
           >
         </div>
       </div>
@@ -74,7 +78,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click="submitPay">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -91,14 +95,57 @@
 </template>
 
 <script>
+import { reqGetPay } from "@api/pay";
+import QRCode from "qrcode";
 export default {
   name: "Pay",
   data() {
     return {};
   },
-  props: {
-    totalPrice: Function,
+  props: {},
+  methods: {
+    async submitPay() {
+      const result = await reqGetPay(this.$route.query.orderId);
+      console.log(result);
+      QRCode.toDataURL(result.codeUrl)
+        .then((url) => {
+          this.$alert(
+            `<img src="${url}" alt="qrcode"/>`,
+            "请使用微信扫码支付",
+            {
+              showClose: false, // 是否显示右上角关闭按钮
+              showCancelButton: true, // 是否显示取消按钮
+              confirmButtonText: "我已成功支付", // 成功按钮文字
+              cancelButtonText: "支付过程中出现问题", // 取消按钮文字
+              center: true, // 全部居中布局
+              dangerouslyUseHTMLString: true, // 才会解析html
+            }
+          )
+            .then(() => {
+              //点击了成功按钮
+              this.$message({
+                type: "success",
+                message: "知支付成功!",
+              });
+              const orderId = this.$route.query.orderId;
+              this.$router.push({
+                path: "/paysuccess",
+                query: {orderId,}
+              });
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消",
+              });
+            });
+        })
+        .catch(() => {
+          console.error("连接失败，请刷新");
+        });
+    },
   },
+  mounted() {},
 };
 </script>
 

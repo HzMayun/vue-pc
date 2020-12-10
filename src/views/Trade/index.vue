@@ -8,9 +8,16 @@
         v-for="user in trade.userAddressList"
         :key="user.id"
       >
-        <span class="username selected" @click="selectAddressId = address.id">{{
-          user.consignee
-        }}</span>
+        <!--  <span
+          :class="{ username: true, selected: user.id === selectAddressId }"
+          @click="selectAddressId = user.id"
+          >{{ user.consignee }}</span
+        > -->
+        <span
+          :class="{ username: true, selected: user.id === selectAddressId }"
+          @click="selectAddressId = user.id"
+          >{{ user.consignee }}</span
+        >
         <p>
           <span class="s1">{{ user.userAddress }}</span>
           <span class="s2">{{ user.phoneNum }}</span>
@@ -44,15 +51,14 @@
           </li>
           <li>
             <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色
-              移动联通电信4G手机硅胶透明防摔软壳 本色系列
+              {{ detail.skuName }}
             </p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
             <h3>￥{{ detail.orderPrice }}</h3>
           </li>
-          <li>X1</li>
+          <li>X {{ detail.skuNum }}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -61,6 +67,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="orderComment"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -95,50 +102,80 @@
       </div>
       <div class="receiveInfo">
         寄送至:
-        <span>北京市昌平区宏福科技园综合楼6层</span>
-        收货人：<span>张三</span>
-        <span>15010658793</span>
+        <span>{{ selectAddress.userAddress }}</span>
+        收货人:<span>{{ selectAddress.consignee }} </span>
+        电话:
+        <span>{{ selectAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submit">提交订单</a>
     </div>
   </div>
 </template>
 
 <script>
-import { reqGetOrder } from "@api/pay";
+import { reqGetOrder, reqSubmitOrder } from "@api/pay";
+
 export default {
   name: "Trade",
   data() {
     return {
       trade: {},
       selectAddressId: -1,
-      orderComment: "",
-      /* tradeNo,
-      consignee,
-      consigneeTel,
-      deliveryAddress,
-      paymentWay,
-      orderComment,
-      orderDetailList, */
+      orderComment: "", //留言  双向绑定
     };
   },
 
-  methods: {},
+  computed: {
+    //送货地址   selectAddressId = user.id
+    selectAddress() {
+      const {
+        selectAddressId,
+        trade: { userAddressList },
+      } = this;
+      return userAddressList
+        ? userAddressList.find((address) => selectAddressId === address.id)
+        : {};
+    },
+  },
+  methods: {
+    async submit() {
+      const { tradeNo, detailArrayList, totalAmount } = this.trade;
+      const { phoneNum, userAddress, consignee } = this.selectAddress;
+      const orderId = await reqSubmitOrder({
+        tradeNo, //订单编号(拼接在路径中)
+        consignee, //收件人姓名
+        consigneeTel: phoneNum, //收件人电话
+        deliveryAddress: userAddress, //地址
+        paymentWay: "ONLINE", //支付方式 (ONLINE代表在线)
+        orderComment: this.orderComment, //订单备注
+        orderDetailList: detailArrayList, //存储多个商品对象的数组
+      });
+      this.$router.push({
+        path: "/pay",
+        query: {
+          orderId,
+          totalAmount,
+        },
+      });
+    },
+  },
   async mounted() {
-    const result = await reqGetOrder();
-    this.trade = result;
-    // console.log(result);
-    /* this.reqSubmitPrder(
-      tradeNo, //订单编号(拼接在路径中)
-      consignee, //收件人姓名
-      consigneeTel, //收件人电话
-      deliveryAddress, //地址
-      paymentWay, //支付方式 (ONLINE代表在线)
-      orderComment, //订单备注
-      orderDetailList //存储多个商品对象的数组
-    ); */
+    const trade = await reqGetOrder(); //发送请求订单、购物车数据
+    this.trade = trade;
+    //修改总数，一共有这么多件
+    this.trade.totalNum = this.trade.detailArrayList.reduce(
+      (p, c) => p + c.skuNum,
+      0
+    );
+    //修改地址
+    // this.selectAddressId = this.trade.userAddressList.find(
+    //   (address) => address.isDefault === "1"
+    // ).id;
+    this.selectAddressId = trade.userAddressList.find(
+      (address) => address.isDefault === "1"
+    ).id;
   },
 };
 </script>

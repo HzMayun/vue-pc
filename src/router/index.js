@@ -114,14 +114,14 @@ const router = new VueRouter({
       path: "/addcartsuccess",
       component: AddCartSuccess,
       //路由独享守卫
-      beforeEnter: (to, from, next) => {
-        //需求：只有添加了购物车才能进，没有添加的就不能进
-        //1、从detail跳过来的 2、有数据。
-        if (from.name === 'detail') {
-          return next()
-        }
-        next("/shopcart")
-      }
+      // beforeEnter: (to, from, next) => {
+      //   //需求：只有添加了购物车才能进，没有添加的就不能进
+      //   //1、从detail跳过来的 2、有数据。
+      //   if (from.name === 'detail') {
+      //     return next()
+      //   }
+      //   next("/shopcart")
+      // }
     },
     {
       // 命名路由

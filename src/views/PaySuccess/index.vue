@@ -7,7 +7,7 @@
       </h3>
       <div class="paydetail">
         <p class="button">
-          <router-link class="btn-look" to="/center">查看订单</router-link>
+          <a class="btn-look" @click="submit">查看订单</a>
           <router-link class="btn-goshop" to="/">继续购物</router-link>
         </p>
       </div>
@@ -18,6 +18,15 @@
 <script>
 export default {
   name: "PaySuccess",
+  methods: {
+    submit() {
+      const orderId = this.$route.query.orderId;
+      this.$router.push({
+        path: "/center/myorder",
+        query: { orderId },
+      });
+    },
+  },
 };
 </script>
 
